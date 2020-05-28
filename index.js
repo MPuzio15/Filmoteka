@@ -12,6 +12,9 @@ let tableWithDetails;
 let tableDetailsHead;
 let navButtonBest;
 let navButtonFav;
+let hamburger;
+let navigation;
+let activeElements;
 
 window.onload = () => {
   getAllMovies();
@@ -20,20 +23,21 @@ window.onload = () => {
   addEventsToButtons();
 };
 
-let getAllMovies = function() {
+let getAllMovies = function () {
   fetch(URL_MOVIE)
-    .then(function(response) {
+    .then(function (response) {
       if (response.ok) {
         return response.json();
       } else {
         Promise.reject(response);
       }
     })
-    .then(function(response) {
+    .then(function (response) {
       allMovies = response;
+      console.log(allMovies);
       return allMovies;
     })
-    .catch(error => {
+    .catch((error) => {
       console.warn(error);
     });
 };
@@ -41,56 +45,71 @@ let getAllMovies = function() {
 function bindDOMElements() {
   tableWithAllMoviesTBody = document.getElementById("tableWithAllMoviesTBody");
   searchInput = document.getElementById("search");
-  console.log(searchInput);
   searchButton = document.getElementsByClassName("searchButton")[0];
   allMoviesList = document.getElementById("allMoviesList");
   tableWithDetails = document.getElementById("tableWithDetails");
   navButtonBest = document.getElementById("best");
   navButtonFav = document.getElementById("favourites");
   tableDetailsHead = document.getElementById("tableWithDetailsHead");
+  hamburger = document.querySelector(".hamburger");
+  navigation = document.querySelector(".navigation");
+  activeElements = document.querySelectorAll(".active");
 }
 
 function addEventToInput() {
-  searchInput.addEventListener("change", event => {
+  searchInput.addEventListener("input", (event) => {
     event.preventDefault();
     handleMoviesInputChange(event);
   });
 }
-
-function addEventsToButtons() {
-  navButtonBest.addEventListener("click", event => {
-    event.preventDefault();
-    showBestMovies();
-  });
-  navButtonFav.addEventListener("click", event => {
-    event.preventDefault();
-    showFavMovies(favouritesMovies);
-  });
-}
-
 function handleMoviesInputChange(event) {
-  debugger;
-  const title = event.target.value;
-
+  let title = event.target.value;
   if (title == "") {
     toggleVisibility(allMoviesList, false);
     clearList(allMoviesList);
   } else {
-    debugger;
     filteredMovies = [];
+    clearList(allMoviesList);
+    filteredMovies = filterMovies(title);
+    // filteredMovies = getByTitle(title);
     console.log(filteredMovies);
-    clearList(tableWithAllMoviesTBody);
-    filteredMovies = getByTitle(title);
+    createListWithAllMovies(filteredMovies);
   }
 }
 
+function filterMovies(searchText) {
+  searchText = searchText.toLocaleLowerCase().trim();
+  return allMovies.filter((movie) => {
+    if (movie.title && movie.title.toLocaleLowerCase().includes(searchText)) {
+      return true;
+    }
+    return false;
+  });
+}
+
+function addEventsToButtons() {
+  navButtonBest.addEventListener("click", (event) => {
+    event.preventDefault();
+    showBestMovies();
+  });
+  navButtonFav.addEventListener("click", (event) => {
+    event.preventDefault();
+    showFavMovies(favouritesMovies);
+  });
+  hamburger.addEventListener("click", (event) => {
+    event.preventDefault();
+    hamburger.classList.toggle("hamburger__active");
+    navigation.classList.toggle("navigation__active");
+  });
+}
+
 function clearList(list) {
-  list.innerHTML = "";
+  list.innerText = "";
 }
 
 function showBestMovies() {
   toggleVisibility(allMoviesList, true);
-  return allMovies.filter(movie => {
+  return allMovies.filter((movie) => {
     if (movie.rate >= 5) {
       filteredMovies.push(movie);
       createListWithAllMovies(filteredMovies);
@@ -101,69 +120,67 @@ function showBestMovies() {
   });
 }
 
-function getByTitle(title) {
-  title = title.toLocaleLowerCase().trim();
-  const requestUrl = `${URL_MOVIE}?name=${title}`;
-  fetch(requestUrl)
-    .then(function(response) {
-      if (response.ok) {
-        return response.json();
-      } else {
-        Promise.reject(response);
-      }
-    })
-    .then(function(response) {
-      clearList(tableWithDetails);
-      toggleVisibility(allMoviesList, true);
-      toggleVisibility(tableDetailsHead, false);
-      toggleVisibility(tableWithDetails, false);
-      toggleVisibility(tableWithAllMoviesTBody, true);
-      filteredMovies = response;
-      createListWithAllMovies(filteredMovies);
-      clearInput();
-    })
-    .catch(error => {
-      console.warn(error);
-    });
-}
+// function getByTitle(title) {
+//   title = title.toLocaleLowerCase().trim();
+//   const requestUrl = `${URL_MOVIE}?name=${title}`;
+//   fetch(requestUrl)
+//     .then(function (response) {
+//       if (response.ok) {
+//         return response.json();
+//       } else {
+//         Promise.reject(response);
+//       }
+//     })
+//     .then(function (response) {
+//       clearList(tableWithDetails);
+//       toggleVisibility(allMoviesList, true);
+//       toggleVisibility(tableDetailsHead, false);
+//       toggleVisibility(tableWithDetails, false);
+//       toggleVisibility(tableWithAllMoviesTBody, true);
+//       filteredMovies = response;
+//       createListWithAllMovies(filteredMovies);
+//       clearInput();
+//     })
+//     .catch((error) => {
+//       console.warn(error);
+//     });
+// }
 
-function createListWithAllMovies(allMovies) {
-  allMovies.forEach(movie => {
-    function createTd(value) {
-      let tdNew = document.createElement("td");
-      tdNew.innerText = value;
-      tr.appendChild(tdNew);
-    }
+function createListWithAllMovies(array) {
+  array.forEach((movie) => {
+    debugger;
     let titleMovie = movie.title;
-    let yearMovie = movie.year;
-    let rateMovie = movie.rate;
     let imgMovie = movie.imgSrc;
-    let tr = document.createElement("tr");
-    let tdDetails = document.createElement("td");
-    tdDetails.setAttribute("class", "tableContainer");
-    let tdDetailsButton = document.createElement("button");
-    tdDetailsButton.innerHTML = "Szczegóły";
-    tdDetailsButton.setAttribute("id", movie.id);
-    tdDetailsButton.setAttribute("class", "inTableButtons");
-    tdDetailsButton.addEventListener("click", showDetails);
-    tdDetails.appendChild(tdDetailsButton);
-    let addToFavButton = document.createElement("button");
-    addToFavButton.innerText = "Dodaj do ulubionych";
-    addToFavButton.setAttribute("id", movie.id);
-    addToFavButton.setAttribute("class", "inTableButtons");
-    addToFavButton.addEventListener("click", addToFav);
-    tdDetails.appendChild(addToFavButton);
-    tr.appendChild(tdDetails);
-    createTd(titleMovie);
-    createTd(yearMovie);
-    createTd(rateMovie);
-    let tdImg = document.createElement("td");
+    let divContainer = document.createElement("div");
+    divContainer.setAttribute("class", "imagesContainer");
+    let divTitle = document.createElement("div");
+    divTitle.setAttribute("class", "divTitle");
+    divTitle.innerText = titleMovie;
+    divContainer.appendChild(divTitle);
+
+    let divImg = document.createElement("div");
+    divImg.setAttribute("class", "divImg");
     let imgIn = document.createElement("img");
     imgIn.setAttribute("src", imgMovie ? imgMovie : "alt.png");
-    imgIn.setAttribute("alt", "Obrazek się nie wyświetla");
-    tdImg.appendChild(imgIn);
-    tr.appendChild(tdImg);
-    tableWithAllMoviesTBody.appendChild(tr);
+    imgIn.setAttribute("alt", "picture unavailable");
+    divImg.appendChild(imgIn);
+    divContainer.appendChild(divImg);
+    let divWithButtons = document.createElement("div");
+    divWithButtons.setAttribute("class", "buttons");
+    let tdDetailsButton = document.createElement("button");
+    tdDetailsButton.setAttribute("class", "buttonDetails");
+    tdDetailsButton.innerHTML = "Details";
+    tdDetailsButton.setAttribute("id", movie.id);
+    tdDetailsButton.addEventListener("click", showDetails);
+    divWithButtons.appendChild(tdDetailsButton);
+    let addToFavButton = document.createElement("button");
+    addToFavButton.setAttribute("class", "buttonFav");
+    addToFavButton.innerText = "Add to fav";
+    addToFavButton.setAttribute("id", movie.id);
+    addToFavButton.addEventListener("click", addToFav);
+    divWithButtons.appendChild(addToFavButton);
+    divContainer.appendChild(divWithButtons);
+    allMoviesList.appendChild(divContainer);
   });
 }
 
@@ -176,7 +193,7 @@ function addToFav(event) {
 }
 
 function showFavMovies(tab) {
-  tab.forEach(urlDetails => {
+  tab.forEach((urlDetails) => {
     getFunction(urlDetails);
   });
   createListWithAllMovies(favouritesMovies);
@@ -191,14 +208,14 @@ function showDetails(event) {
 
 function getFunction(urlDetails) {
   fetch(urlDetails)
-    .then(function(response) {
+    .then(function (response) {
       if (response.ok) {
         return response.json();
       } else {
         Promise.reject(response);
       }
     })
-    .then(function(response) {
+    .then(function (response) {
       clearList(allMoviesList);
       toggleVisibility(allMoviesList, false);
       toggleVisibility(tableDetailsHead, true);
@@ -206,7 +223,7 @@ function getFunction(urlDetails) {
       toggleVisibility(tableWithDetails, true);
       createTableWithDetails(detailsAboutMovie);
     })
-    .catch(error => {
+    .catch((error) => {
       console.warn(error);
     });
 }
@@ -263,14 +280,14 @@ function deleteMovie() {
     method: "DELETE",
     credentials: "same-origin",
     headers: {
-      "Content-Type": "application/json"
-    }
+      "Content-Type": "application/json",
+    },
   })
-    .then(response => {
+    .then((response) => {
       console.log(response);
       clearList(detailsAboutMovie);
     })
-    .catch(error => {
+    .catch((error) => {
       console.warn(error);
     });
 }

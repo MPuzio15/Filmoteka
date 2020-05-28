@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>BestMovies.com</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
+    />
+    <link rel="stylesheet" type="text/css" href="./styles.css" />
+    <script src="./index.js"></script>
+  </head>
+  <body>
+    <header class="header">
+      <section class="menu">
+        <nav>
+          <button class="hamburger">
+            <span class='hamburger-box'>
+              <span class="hamburger-inner"</span>
+              </span>
+          </button>
+          <aside class="navigation">
+            <ul class="navigation-list">
+              <li class="navigation-item"><a href="#" id="best">Home</a></li>
+              <li class="navigation-item"><a href="#" id="best">Best rated</a></li>
+              <li class="navigation-item"><a href="#" id="favourites">Favourites</a></li>
+            </ul>
+          </aside>
+        </nav>
+      </section>
+    </header>
+    <main class="active">
+      <div class="mainInput">
+        <i class="fa fa-search"></i>
+        <input
+          type="text"
+          id="search"
+          placeholder="movie title"
+        >
+       
+        <label>ex. armed, to Paris, la boda de valentina... </label>
+      </div>
+
+      <div id="allMoviesList" class="hidden"></div>
+
+      <table id="tableWithDetailsHead" class="hidden">
+        <thead>
+          <tr>
+            <th></th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody id="tableWithDetails" class="hidden"></tbody>
+      </table>
+    </main>
+
+    <script
+      src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+      integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+      integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+      crossorigin="anonymous"
+    ></script>
+  </body>
+  <footer><p>&copy; BestMovies.com</p></footer>
+</html>
