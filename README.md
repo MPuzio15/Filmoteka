@@ -13,7 +13,7 @@ User can search for the particular movie by title, sort out the best rated movie
 To see the webside use the following link:  https://filmoteka.martynapuzio.pl/
 # Installation
 ```
- Copy the clone command:     git clone https://github.com/MPuzio15/Filmoteka.git
+Copy the clone command:     git clone https://github.com/MPuzio15/Filmoteka.git
 ```
 ```
 From a terminal window, go to the local directory where you want to clone your repository.
