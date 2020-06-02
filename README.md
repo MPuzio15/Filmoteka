@@ -19,7 +19,7 @@ To see the webside use the following link:  https://filmoteka.martynapuzio.pl/
 From a terminal window, go to the local directory where you want to clone your repository.
 ```
 ```
-Paste the command you copied from Bitbucket
+Paste the command you copied
 ```
 
 If the clone was successful, a new sub-directory appears on your local drive in the directory where you cloned your repository. 
