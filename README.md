@@ -1,13 +1,13 @@
 # Filmoteka
 
-Filmoteka is an online app using the movies data taken from API. 
+Filmoteka is a website using the movies data taken from API. 
 User can search for the particular movie by title, sort out the best rated movies by clickingthe tab in the menu or add a movie to the favourites and then show all the favourites and then show all of them.
 
 # Technologies
 
  - HTML5
   - CSS3
-  - JS
+  - Vanilla JS
   - REST API
 
 To see the webside use the following link:  https://filmoteka.martynapuzio.pl/
